@@ -11,7 +11,6 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { useWalletStore } from "@/stores/walletStore";
-import { useEnvironmentStore } from "@/stores/environment";
 import {
   MOCK_TREASURY_BALANCE,
   MOCK_TRANSACTIONS,
@@ -30,9 +29,10 @@ export interface QueueItem {
 
 export default function AdminActionQueue() {
   const { isConnected, network } = useWalletStore();
-  const expectedNetwork = useEnvironmentStore((s) => s.getActiveProfileConfig().stellarNetwork);
   const [walletSynced, setWalletSynced] = useState(false);
   const [syncing, setSyncing] = useState(false);
+
+  const EXPECTED_NETWORK = process.env.NEXT_PUBLIC_STELLAR_NETWORK || "TESTNET";
 
   const handleSyncWallet = () => {
     setSyncing(true);
@@ -100,12 +100,12 @@ export default function AdminActionQueue() {
     });
 
     if (isConnected) {
-      if (network !== expectedNetwork) {
+      if (network !== EXPECTED_NETWORK) {
         items.push({
           id: "wallet-network-mismatch",
           type: "stale_wallet",
           title: "Critical: Wallet Network Mismatch",
-          description: `Connected wallet is on ${network}, but the system is configured for ${expectedNetwork}.`,
+          description: `Connected wallet is on ${network}, but the system is configured for ${EXPECTED_NETWORK}.`,
           severity: "critical",
           actionLabel: "Switch Network",
           link: "/settings",
@@ -138,7 +138,8 @@ export default function AdminActionQueue() {
     });
 
     return items;
-  }, [isConnected, network, walletSynced, expectedNetwork]);
+  }, [isConnected, network, walletSynced, EXPECTED_NETWORK]);
+
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {

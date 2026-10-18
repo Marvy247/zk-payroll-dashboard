@@ -4,27 +4,15 @@ import { useState } from "react";
 import { AlertTriangle, CheckCircle, ArrowDownLeft, Plus, Lock } from "lucide-react";
 import { MOCK_TREASURY_BALANCE, MOCK_TRANSACTIONS, MOCK_COMPANIES } from "@/lib/api/mockData";
 import FundingForecast from "./FundingForecast";
-import ReservationTimeline from "./ReservationTimeline";
 import StatusBadge from "@/components/ui/StatusBadge";
 import TreasuryReadinessChecklist from "./TreasuryReadinessChecklist";
 import TreasuryDrainWarning from "./TreasuryDrainWarning";
 import FundingImbalanceDashboard from "./FundingImbalanceDashboard";
-import ReservationExpiryWarning from "./ReservationExpiryWarning";
 import ReservationToastListener from "./ReservationToastListener";
-import AssetReadinessTable from "./AssetReadinessTable";
-import TreasuryReplenishmentReadinessCard from "./TreasuryReplenishmentReadinessCard";
 import { createFundingReservation } from "@/lib/events/reservationEvents";
-import SupportedAssetsEmptyState from "@/components/features/assets/SupportedAssetsEmptyState";
-import { hasSupportedPayrollAssets } from "@/lib/assets/supportedAssets";
 
-function TreasuryView({ configuredAssets }: { configuredAssets?: Array<{ code: string; issuer?: string }> } = {}) {
+function TreasuryView() {
   const [toastVisible, setToastVisible] = useState(false);
-
-  // Demo wiring: if no assets passed, treat treasury address presence as "configured"
-  // When MOCK_COMPANIES has treasury but assets list is empty, show empty state for QA.
-  // Pass configuredAssets explicitly to hide the empty state.
-  const effectiveAssets = configuredAssets ?? (MOCK_COMPANIES[0]?.treasury ? [{ code: "USDC" }, { code: "XLM" }] : []);
-  const assetsMissing = !hasSupportedPayrollAssets(effectiveAssets);
 
   const handleReserveFunds = () => {
     createFundingReservation();
@@ -48,10 +36,6 @@ function TreasuryView({ configuredAssets }: { configuredAssets?: Array<{ code: s
       <h2 id="treasury-heading" className="text-lg font-semibold text-gray-900">
         Treasury
       </h2>
-
-      {assetsMissing && (
-        <SupportedAssetsEmptyState configuredAssets={effectiveAssets} variant="treasury" compact={false} />
-      )}
 
       {isLowBalance && (
         <div
@@ -110,34 +94,6 @@ function TreasuryView({ configuredAssets }: { configuredAssets?: Array<{ code: s
         </article>
       </div>
 
-      <TreasuryReplenishmentReadinessCard />
-
-      <AssetReadinessTable
-        rows={[
-          {
-            assetCode: "USDC",
-            availableBalance: 45000,
-            reserveThreshold: 25000,
-            lastRefresh: "2026-09-25T13:00:00Z",
-            warning: "Above reserve threshold",
-          },
-          {
-            assetCode: "XLM",
-            availableBalance: 28000,
-            reserveThreshold: 25000,
-            lastRefresh: "2026-09-25T12:20:00Z",
-            warning: "Above reserve threshold",
-          },
-          {
-            assetCode: "EURC",
-            availableBalance: 18000,
-            reserveThreshold: 25000,
-            lastRefresh: "2026-09-25T11:40:00Z",
-            warning: "Below reserve threshold",
-          },
-        ]}
-      />
-
       <TreasuryDrainWarning
         currentBalance={balance}
         projectedDrain={projectedPayroll}
@@ -147,11 +103,7 @@ function TreasuryView({ configuredAssets }: { configuredAssets?: Array<{ code: s
 
       <TreasuryReadinessChecklist />
 
-      <ReservationExpiryWarning />
-
       <FundingForecast />
-
-      <ReservationTimeline />
 
       {company && (
         <div className="bg-white rounded-lg shadow-sm p-6">

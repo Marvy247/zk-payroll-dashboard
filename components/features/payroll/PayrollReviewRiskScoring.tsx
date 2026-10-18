@@ -14,10 +14,6 @@ import type {
   RiskFactor,
   PayrollRiskScore,
 } from "@/types/models";
-import {
-  findIneligibleEmployees,
-  formatIneligibleEmployees,
-} from "@/src/payroll/inactiveEmployees";
 
 interface PayrollReviewRiskScoringProps {
   payrollRun: PayrollRun;
@@ -113,22 +109,16 @@ function calculateRiskScore(
     });
   }
 
-  // Check for employees that must not be paid: inactive, suspended, or no
-  // longer present in the roster (stale draft data — see #293).
-  const ineligibleEmployees = findIneligibleEmployees(
-    employees,
-    payrollRun.employeeIds,
+  // Check for inactive employees
+  const inactiveEmployees = selectedEmployees.filter(
+    (emp) => emp.status === "inactive" || emp.isActive === false,
   );
-  if (ineligibleEmployees.length > 0) {
+  if (inactiveEmployees.length > 0) {
     factors.push({
       type: "inactive_employee",
       severity: "high",
-      title: "Inactive or Suspended Employees in Run",
-      description: `${
-        ineligibleEmployees.length
-      } employee(s) in this run are not eligible for payment: ${formatIneligibleEmployees(
-        ineligibleEmployees,
-      )}`,
+      title: "Inactive Employees in Run",
+      description: `${inactiveEmployees.length} inactive employee(s) included`,
       weight: RISK_WEIGHTS.inactive_employee,
     });
   }

@@ -13,6 +13,7 @@ export interface ProofReferenceInputProps {
   onChange: (value: string) => void;
   onValidityChange?: (isValid: boolean) => void;
   label?: string;
+  autoFocus?: boolean;
 }
 
 /**
@@ -25,6 +26,7 @@ export function ProofReferenceInput({
   onChange,
   onValidityChange,
   label = "Proof reference",
+  autoFocus,
 }: ProofReferenceInputProps) {
   const inputId = useId();
   const hintId = useId();
@@ -48,6 +50,7 @@ export function ProofReferenceInput({
           id={inputId}
           type="text"
           value={value}
+          autoFocus={autoFocus}
           onChange={(e) => commit(e.target.value)}
           onPaste={(e) => {
             e.preventDefault();

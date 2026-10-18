@@ -28,7 +28,6 @@ import type { Employee } from "@/types";
 import OnboardingBadge from "./OnboardingBadge";
 import EmptyState from "@/components/ui/EmptyState";
 import WalletChangeReviewCard from "@/components/review/WalletChangeReviewCard";
-import RecipientLockBadge from "./RecipientLockBadge";
 
 export interface EmployeeDetailDrawerProps {
   employee: Employee | null;
@@ -144,12 +143,9 @@ export function EmployeeDetailDrawer({ employee, isOpen, onClose }: EmployeeDeta
                   <div className="flex items-center gap-2 text-xs text-gray-500">
                     <Wallet className="w-3.5 h-3.5" /> Stellar Address
                   </div>
-                  <div className="flex items-center gap-2">
-                    <p className="text-xs font-mono break-all bg-gray-100 p-2 rounded text-gray-600 flex-1">
-                      {employee.address}
-                    </p>
-                    <RecipientLockBadge employeeId={employee.id} employeeName={employee.name} />
-                  </div>
+                  <p className="text-xs font-mono break-all bg-gray-100 p-2 rounded text-gray-600">
+                    {employee.address}
+                  </p>
                 </div>
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-2 text-xs text-gray-500">
@@ -374,7 +370,6 @@ export default function EmployeeDetail({ employeeId }: { employeeId: string }) {
               </dd>
             </div>
           </dl>
-          <RecipientLockBadge employeeId={employee.id} employeeName={employee.name} variant="banner" />
         </div>
       </div>
 

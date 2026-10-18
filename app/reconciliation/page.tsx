@@ -1,12 +1,12 @@
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import ReconciliationDashboard from "@/components/features/reconciliation/ReconciliationDashboard";
+import ReconciliationPanel from "@/components/features/reconciliation/ReconciliationPanel";
 
-function ReconciliationDashboardPage() {
+function ReconciliationPage() {
   return (
     <DashboardLayout>
-      <ReconciliationDashboard />
+      <ReconciliationPanel />
     </DashboardLayout>
   );
 }
 
-export default ReconciliationDashboardPage;
+export default ReconciliationPage;

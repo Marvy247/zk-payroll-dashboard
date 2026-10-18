@@ -1,23 +1,14 @@
 "use client";
 
-import React from "react";
 import { AlertTriangle } from "lucide-react";
 import type { Employee } from "@/types/models";
 import {
   findDuplicateEmployeeWarnings,
   type DuplicateWarningGroup,
-  type PaymentInstruction,
-  type PaymentInstructionDuplicateOptions,
 } from "@/lib/duplicateDetection";
-import { PaymentInstructionDuplicateWarning } from "@/components/features/payroll/PaymentInstructionDuplicateWarning";
 
-export interface DuplicateWarningPanelProps {
-  /** Employee rows in the draft (issue #366). */
-  employees?: Employee[];
-  /** Optional payment instructions in the draft (issue #633). */
-  instructions?: PaymentInstruction[];
-  /** Optional options for duplicate detection (issue #633). */
-  options?: PaymentInstructionDuplicateOptions;
+interface DuplicateWarningPanelProps {
+  employees: Employee[];
 }
 
 function shortAddress(address: string): string {
@@ -33,26 +24,12 @@ function guidanceFor(group: DuplicateWarningGroup): string {
 }
 
 /**
- * Warns about duplicate employee ids, wallet addresses, or payment instructions
- * in a payroll draft before the user submits it (#366, #633).
- * Renders nothing when the draft has no duplicates, so it never adds visual noise.
+ * Warns about duplicate employee ids or wallet addresses in a payroll draft
+ * before the user submits it (issue #366). Renders nothing when the draft
+ * has no duplicates, so it never adds visual noise to the common case.
  */
-export function DuplicateWarningPanel({
-  employees,
-  instructions,
-  options,
-}: DuplicateWarningPanelProps) {
-  // If payment instructions are explicitly provided, render the instruction-level component
-  if (instructions !== undefined) {
-    return (
-      <PaymentInstructionDuplicateWarning
-        instructions={instructions}
-        options={options}
-      />
-    );
-  }
-
-  const groups = employees ? findDuplicateEmployeeWarnings(employees) : [];
+function DuplicateWarningPanel({ employees }: DuplicateWarningPanelProps) {
+  const groups = findDuplicateEmployeeWarnings(employees);
 
   if (groups.length === 0) return null;
 

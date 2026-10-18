@@ -528,14 +528,7 @@ export default function PayrollArchiveCenter() {
 
                   {/* Status Badges */}
                   <div className="flex items-center gap-2 shrink-0">
-                                        <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full border bg-emerald-50 text-emerald-700 border-emerald-200">
-                      {run.isDisputed
-                        ? "Blocked by dispute"
-                        : run.isArchived
-                          ? "Archived"
-                          : "Ready to archive"}
-                    </span>
-<span
+                    <span
                       className={`text-xs font-bold px-2.5 py-0.5 rounded-full border uppercase ${getStatusBadgeClass(
                         run.status
                       )}`}
