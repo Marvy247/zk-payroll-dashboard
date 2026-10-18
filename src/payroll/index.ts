@@ -15,3 +15,6 @@ export * from "./payrollAccountingReconciliationMarkers";
 export * from "./beneficiaryChangeVerificationWorkflow";
 export * from "./fundingSourceFailoverValidation";
 export * from "./historicalPayrollAccessAuthorization";
+export * from "./payrollImportRollback";
+export * from "./compensationGroupMembership";
+export * from "./payoutConfirmationRetryPolicy";
