@@ -11,3 +11,6 @@ export * from "./assetAvailabilitySafety";
 export * from "./compensationPolicyEffectiveDate";
 export * from "./paymentInstructionDuplicate";
 export * from "./employeeEligibilityStatus";
+export * from "./payrollImportRollback";
+export * from "./compensationGroupMembership";
+export * from "./payoutConfirmationRetryPolicy";
